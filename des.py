@@ -1,5 +1,7 @@
-# I am heavily borrowing most of the code from https://www.geeksforgeeks.org/data-encryption-standard-des-set-1/ to teach DES.
+# The code is taken from from https://www.geeksforgeeks.org/data-encryption-standard-des-set-1/ to teach DES.
 # Credits to Aditya Jain and Shubham Upadhyay
+# Small changes were made by me to suit this project.
+
 
 # Hexadecimal to binary conversion
 def hex2bin(s):
@@ -110,7 +112,7 @@ def xor(a, b):
             ans = ans + "1"
     return ans
   
-# Table of Position of 64 bits at initail level: Initial Permutation Table
+# Table of Position of 64 bits at initial level: Initial Permutation Table
 initial_perm = [58, 50, 42, 34, 26, 18, 10, 2, 
                 60, 52, 44, 36, 28, 20, 12, 4, 
                 62, 54, 46, 38, 30, 22, 14, 6, 
@@ -225,7 +227,7 @@ def encrypt(pt, rkb, rk):
         # Swapper
         if(i != 15):
             left, right = right, left 
-        round_str.append("Round " + str(i + 1) + " " + bin2hex(left) +  " " + bin2hex(right) + " " + str(rk[i]))
+        round_str.append("Round " + str(i + 1) + ": " + bin2hex(left) +  " " + bin2hex(right))
       
     # Combination
     combine = left + right

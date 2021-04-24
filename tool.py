@@ -60,11 +60,14 @@ def decrypt(sender, data):
     rkb_rev = rkb[::-1]
     rk_rev = rk[::-1]
     perm_str, round_str, text = des.encrypt(cipher_text, rkb_rev, rk_rev)
-    with simple.window(window_name, width=320, height=350, x_pos=251, y_pos=0):
+    with simple.window(window_name, width=450, height=380, x_pos=251, y_pos=0):
         core.add_text(perm_str)
+        core.add_text("Round #    Left     Right")
         for i in range(len(round_str)):
             core.add_text(round_str[i])
-        core.add_text("Plain Text: " + text)
+        core.add_text("Plain Text in hex (after final permuation): " + text)
+        plaintext = bytes.fromhex(text.lower()).decode('utf-8', "replace")
+        core.add_text("Plain Text in clear text (after final permuation): " + plaintext)
 
 def encrypt(sender, data):
     pt = str(core.get_value("Input"))
@@ -94,11 +97,12 @@ def encrypt(sender, data):
     key, left, right = get_initial_values(key)
     rk, rkb = get_rk_rkb(left, right)
     perm_str, round_str, cipher_text = des.encrypt(pt, rkb, rk)
-    with simple.window(window_name, width=320, height=350, x_pos=251, y_pos=0):
+    with simple.window(window_name, width=450, height=360, x_pos=251, y_pos=0):
         core.add_text(perm_str)
+        core.add_text("Round #    Left     Right")
         for i in range(len(round_str)):
             core.add_text(round_str[i])
-        core.add_text("Cipher Text: " + cipher_text)
+        core.add_text("Cipher Text (after final permuation): " + cipher_text)
 
 with simple.window("ECB DES Learning Tool", width=225, height=200, x_pos=0, y_pos=0):
     core.add_radio_button("RadioButton##widget", items=["Hex", "Plaintext"], horizontal=True)
@@ -136,5 +140,5 @@ key_comp = [14, 17, 11, 24, 1, 5,
             44, 49, 39, 56, 34, 53, 
             46, 42, 50, 36, 29, 32 ]
 
-core.set_main_window_size(600, 400)
+core.set_main_window_size(750, 430)
 core.start_dearpygui()
