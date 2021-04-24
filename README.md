@@ -1,15 +1,15 @@
 # ECB DES Teaching Tool
-This is an interactive tool that decrypts and encrypts using Electronic Code Book Data Encryption Standard (ECB DES). It takes an online DES converter a step further by showing the bytes (in hex) in between each round. This project makes use of the DearPyGUI frontend framework for the UI and code from [Geeks for Geeks]:https://www.geeksforgeeks.org/data-encryption-standard-des-set-1/ for the DES algorithm. 
+This is an interactive tool that decrypts and encrypts using Electronic Code Book Data Encryption Standard (ECB DES). It takes an online DES converter a step further by showing the bytes (in hex) in between each round. This project makes use of the DearPyGUI frontend framework for the UI and code from Geeks for Geeks: https://www.geeksforgeeks.org/data-encryption-standard-des-set-1/ for the DES algorithm. 
 
-Github [Link]: https://github.com/phillnguyen/des-teaching-tool 
+Github Link: https://github.com/phillnguyen/des-teaching-tool 
 
 ## How to use
-1. Install python 3 from [here]: https://www.python.org/downloads/ 
+1. Install python 3 from here: https://www.python.org/downloads/ 
 2. While installing python 3, ensure that you use the installer to config you enviroment variables to enable the pip command
 3. Install dependencies using `pip install <insert dependency name>`
 4. Run using `python3 tool.py` inside the project directory.
 ## Known Dependencies 
-These should be installed using `pip install <insert dependency name>`
+These should be installed using `pip install <insert dependency name>` (Example: `pip install dearpygui`)
 1. dearpygui 0.6.294
 2. ipykernel 5.5.0
 ## Limitations
