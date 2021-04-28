@@ -14,5 +14,5 @@ These should be installed using `pip install <insert dependency name>` (Example:
 2. ipykernel 5.5.0
 ## Limitations
 1. Can only do ECB DES
-2. Inputs must be 64 bits (length 16 hex, length 8 plaintext)
+2. Inputs must be up to 64 bits (length 16 hex, length 8 plaintext). Less than 64 bits will be padded with 0 bits
 3. To get clear text outputs, hex is decoded in utf-8. Based on hex outputs, some characters may appear as '?' if the character cannot be decoded using utf-8
