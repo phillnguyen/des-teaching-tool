@@ -34,14 +34,20 @@ def check_inputs(key, text):
 
 def decrypt(sender, data):
     core.configure_item("Cannot Decrypt with plaintext", show=False)
-    core.configure_item("Input and Key must be 64 bits", show=False)
+    core.configure_item("Input must be < 128 bits and key must be 64 bits", show=False)
     cipher_text = str(core.get_value("Input"))
     if (core.get_value("RadioButton##widget") == 1):
         core.configure_item("Cannot Decrypt with plaintext", show=True)
         return
     # padding
-    while len(cipher_text) < 16:
-        cipher_text += "0"
+    if len(cipher_text) > 16:
+        while len(cipher_text) < 32:
+            cipher_text += "0"
+        cipher_text2 = cipher_text[16:32]
+        cipher_text = cipher_text[:16]
+    else:
+        while len(cipher_text) < 16:
+            cipher_text += "0"
     key = str(core.get_value("Key"))
     # selected plain text
     if (core.get_value("RadioButton##widget1") == 1):
@@ -50,20 +56,30 @@ def decrypt(sender, data):
     while len(key) < 16:
         key += "0"
     if not check_inputs(key, cipher_text):
-        core.configure_item("Input and Key must be 64 bits", show=True)
+        core.configure_item("Input must be < 128 bits and key must be 64 bits", show=True)
         return
+    if "cipher_text2" in locals():
+        if not check_inputs(key, cipher_text2):
+            core.configure_item("Input must be < 128 bits and key must be 64 bits", show=True)
+            return
     window_name = "Decryption"
     other_window_name = "Encryption"
     if core.does_item_exist(window_name):
         core.delete_item(window_name)
     if core.does_item_exist(other_window_name):
         core.delete_item(other_window_name)
+    window_name2 = "Decryption2"
+    other_window_name2 = "Encryption2"
+    if core.does_item_exist(window_name2):
+        core.delete_item(window_name2)
+    if core.does_item_exist(other_window_name2):
+        core.delete_item(other_window_name2)
     key, left, right = get_initial_values(key)
     rk, rkb = get_rk_rkb(left, right)
     rkb_rev = rkb[::-1]
     rk_rev = rk[::-1]
     perm_str, round_str, text = des.encrypt(cipher_text, rkb_rev, rk_rev)
-    with simple.window(window_name, width=450, height=380, x_pos=251, y_pos=0):
+    with simple.window(window_name, width=450, height=380, x_pos=351, y_pos=0):
         core.add_text(perm_str)
         core.add_text("Round #    Left     Right")
         for i in range(len(round_str)):
@@ -71,17 +87,34 @@ def decrypt(sender, data):
         core.add_text("Plain Text in hex (after final permuation): " + text)
         plaintext = bytes.fromhex(text.lower()).decode('utf-8', "replace")
         core.add_text("Plain Text in clear text (after final permuation): " + plaintext)
+    if "cipher_text2" in locals():
+        perm_str2, round_str2, text2 = des.encrypt(cipher_text2, rkb_rev, rk_rev)
+        with simple.window(window_name2, width=450, height=390, x_pos=801, y_pos=0):
+            core.add_text(perm_str2)
+            core.add_text("Round #    Left     Right")
+            for i in range(len(round_str2)):
+                core.add_text(round_str2[i])
+            core.add_text("Plain Text2 in hex (after final permuation): " + text2)
+            plaintext2 = bytes.fromhex(text2.lower()).decode('utf-8', "replace")
+            core.add_text("Plain Text2 in clear text (after final permuation): " + plaintext2)
+            core.add_text("Combined Plain Text: " + plaintext + plaintext2) 
 
 def encrypt(sender, data):
     pt = str(core.get_value("Input"))
     core.configure_item("Cannot Decrypt with plaintext", show=False)
-    core.configure_item("Input and Key must be 64 bits", show=False)
+    core.configure_item("Input must be < 128 bits and key must be 64 bits", show=False)
     # selected plain text
     if (core.get_value("RadioButton##widget") == 1):
         pt = pt.encode().hex()
     # padding
-    while len(pt) < 16:
-        pt += "0"
+    if len(pt) > 16:
+        while len(pt) < 32:
+            pt += "0"
+        pt2 = pt[16:32]
+        pt = pt[:16]
+    else:
+        while len(pt) < 16:
+            pt += "0"
     key = str(core.get_value("Key"))
     # selected plain text
     if (core.get_value("RadioButton##widget1") == 1):
@@ -90,32 +123,52 @@ def encrypt(sender, data):
     while len(key) < 16:
         key += "0"
     if not check_inputs(key, pt):
-        core.configure_item("Input and Key must be 64 bits", show=True)
+        core.configure_item("Input must be < 128 bits and key must be 64 bits", show=True)
         return
+    if "pt2" in locals():
+        if not check_inputs(key, pt2):
+            core.configure_item("Input must be < 128 bits and key must be 64 bits", show=True)
+            return
     window_name = "Encryption"
     other_window_name = "Decryption"
+    window_name2 = "Encryption2"
+    other_window_name2 = "Decryption2"
     if core.does_item_exist(window_name):
         core.delete_item(window_name)
+    if core.does_item_exist(window_name2):
+        core.delete_item(window_name2)
     if core.does_item_exist(other_window_name):
         core.delete_item(other_window_name)
+    if core.does_item_exist(other_window_name2):
+        core.delete_item(other_window_name2)
     key, left, right = get_initial_values(key)
     rk, rkb = get_rk_rkb(left, right)
     perm_str, round_str, cipher_text = des.encrypt(pt, rkb, rk)
-    with simple.window(window_name, width=450, height=360, x_pos=251, y_pos=0):
+    with simple.window(window_name, width=450, height=360, x_pos=351, y_pos=0):
         core.add_text(perm_str)
         core.add_text("Round #    Left     Right")
         for i in range(len(round_str)):
             core.add_text(round_str[i])
         core.add_text("Cipher Text (after final permuation): " + cipher_text)
+    if "pt2" in locals():
+        perm_str2, round_str2, cipher_text2 = des.encrypt(pt2, rkb, rk)
+        combined_cipher_text = cipher_text + cipher_text2 
+        with simple.window(window_name2, width=460, height=375, x_pos=801, y_pos=0):
+            core.add_text(perm_str2)
+            core.add_text("Round #    Left     Right")
+            for i in range(len(round_str2)):
+                core.add_text(round_str2[i])
+            core.add_text("Cipher Text2 (after final permuation): " + cipher_text2)  
+            core.add_text("Combined Cipher Text: " + combined_cipher_text)  
 
-with simple.window("ECB DES Learning Tool", width=230, height=200, x_pos=0, y_pos=0):
+with simple.window("ECB DES Learning Tool", width=350, height=200, x_pos=0, y_pos=0):
     core.add_radio_button("RadioButton##widget", items=["Hex", "Plaintext"], horizontal=True)
     core.add_input_text("Input", height=100)
     core.add_radio_button("RadioButton##widget1", items=["Hex", "Plaintext"], horizontal=True)
     core.add_input_text("Key")
     core.add_button("Decrypt", callback=decrypt)
     core.add_button("Encrypt", callback=encrypt)
-    core.add_text("Input and Key must be 64 bits", color=[255, 0, 0, 255], show=False)
+    core.add_text("Input must be < 128 bits and key must be 64 bits", color=[255, 0, 0, 255], show=False)
     core.add_text("Cannot Decrypt with plaintext", color=[255, 0, 0, 255], show=False)
 
 # --parity bit drop table
@@ -144,5 +197,5 @@ key_comp = [14, 17, 11, 24, 1, 5,
             44, 49, 39, 56, 34, 53, 
             46, 42, 50, 36, 29, 32 ]
 
-core.set_main_window_size(750, 430)
+core.set_main_window_size(1300, 430)
 core.start_dearpygui()

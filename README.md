@@ -3,16 +3,17 @@ This is an interactive tool that decrypts and encrypts using Electronic Code Boo
 
 Github Link: https://github.com/phillnguyen/des-teaching-tool 
 
-## How to use
+## How to run
 1. Install python 3 from here: https://www.python.org/downloads/ 
 2. While installing python 3, ensure that you use the installer to config you enviroment variables to enable the pip command
 3. Install dependencies using `pip install <insert dependency name>`
-4. Run using `python3 tool.py` inside the project directory.
+4. Run using `python3 tool.py` or `python tool.py` inside the project directory.
 ## Known Dependencies 
 These should be installed using `pip install <insert dependency name>` (Example: `pip install dearpygui`)
 1. dearpygui 0.6.294
-2. ipykernel 5.5.0
 ## Limitations
 1. Can only do ECB DES
-2. Inputs must be up to 64 bits (length 16 hex, length 8 plaintext). Less than 64 bits will be padded with 0 bits
+2. Inputs must be less than 128 bits (length 32 hex, length 16 plaintext). 64 < bits <= 128 bits will run DES twice. <= 64 bits will run once.
 3. To get clear text outputs, hex is decoded in utf-8. Based on hex outputs, some characters may appear as '?' if the character cannot be decoded using utf-8
+4. Key is not verified using parity bits.
+5. Program assumes to user inputs plain text, cipher text, and key according to the selected radio button preceding the text input.
