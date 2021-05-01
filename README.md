@@ -5,7 +5,7 @@ Github Link: https://github.com/phillnguyen/des-teaching-tool
 
 ## How to run
 1. Install python 3 from here: https://www.python.org/downloads/ 
-2. While installing python 3, ensure that you use the installer to config you enviroment variables to enable the pip command
+2. Ensure that you configure your environment variables to enable the pip command.
 3. Install dependencies using `pip install <insert dependency name>`
 4. Run using `python3 tool.py` or `python tool.py` inside the project directory.
 ## Known Dependencies 
